@@ -16,7 +16,7 @@ Pipeline reproducible que monitorea por ventanas deslizantes el comportamiento d
 
 ## Datasets
 
-Los datos crudos **no se versionan** (son públicos y pesados). Se descargan con `make data` o los descargan los propios notebooks.
+Los datos crudos no se versionan (son públicos). Enlaces, descarga directa y SHA-256 en [`data/README.md`](data/README.md); se obtienen con `make data` o desde los propios notebooks.
 
 | Dominio | Fuente | Ubicación local |
 |---|---|---|
