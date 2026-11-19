@@ -1,4 +1,4 @@
-"""Descarga los tres datasets del TT 2026-B080 en data/raw/.
+"""Descarga los tres datasets del TT 2026-B080 en data/<dataset>/.
 
 Uso:  python scripts/download_data.py
 """
@@ -8,7 +8,7 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
-RAW = Path(__file__).resolve().parents[1] / "data" / "raw"
+RAW = Path(__file__).resolve().parents[1] / "data"
 
 UCI_ZIPS = {
     "polish": "https://archive.ics.uci.edu/static/public/365/polish+companies+bankruptcy+data.zip",
@@ -16,7 +16,7 @@ UCI_ZIPS = {
 }
 
 EXPECTED = {
-    "airline": ["airline_delay.csv"],
+    "airline": ["Airline_openml.csv"],
     "polish": [f"{i}year.arff" for i in range(1, 6)],
     "diabetes": ["diabetic_data.csv", "IDS_mapping.csv"],
 }
@@ -45,7 +45,7 @@ def download_airline() -> None:
     frame = fetch_openml(data_id=1169, as_frame=True, parser="auto").frame
     dest = RAW / "airline"
     dest.mkdir(parents=True, exist_ok=True)
-    frame.to_csv(dest / "airline_delay.csv", index=False)
+    frame.to_csv(dest / "Airline_openml.csv", index=False)
 
 
 def check() -> bool:
@@ -54,7 +54,7 @@ def check() -> bool:
         for fname in files:
             found = any(RAW.joinpath(name).rglob(fname))
             if not found:
-                print(f"FALTA: data/raw/{name}/{fname}")
+                print(f"FALTA: data/{name}/{fname}")
                 ok = False
     return ok
 

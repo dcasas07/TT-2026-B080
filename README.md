@@ -16,51 +16,56 @@ Pipeline reproducible que monitorea por ventanas deslizantes el comportamiento d
 
 ## Datasets
 
-| Dominio | Fuente | Archivos esperados |
-|---|---|---|
-| Airline Delay | OpenML, ID 1169 | `data/raw/airline/airline_delay.csv` |
-| Polish Companies Bankruptcy | UCI, ID 365 | `data/raw/polish/1year.arff` … `5year.arff` |
-| Diabetes 130-US Hospitals | UCI, ID 296 | `data/raw/diabetes/diabetic_data.csv`, `IDS_mapping.csv` |
+Los datos crudos **no se versionan** (son públicos y pesados). Se descargan con `make data` o los descargan los propios notebooks.
 
-Los datos no se versionan. Se descargan con `make data` (o `python scripts/download_data.py`).
+| Dominio | Fuente | Ubicación local |
+|---|---|---|
+| Airline Delay | [OpenML 1169](https://www.openml.org/d/1169) | `data/airline/Airline_openml.csv` |
+| Polish Companies Bankruptcy | [UCI 365](https://archive.ics.uci.edu/dataset/365) | `data/polish/1year.arff` … `5year.arff` |
+| Diabetes 130-US Hospitals | [UCI 296](https://archive.ics.uci.edu/dataset/296) | `data/diabetes/diabetic_data.csv`, `IDS_mapping.csv` |
 
 ## Estructura
 
 ```
 .
-├── app.py                  # Dashboard Streamlit (punto de entrada)
-├── notebooks/              # Tres notebooks de experimentación (Polish, Airline, Diabetes)
-├── src/                    # Módulos reutilizables por dataset: polish_tt2, airline_tt2, diabetes_tt2
-├── scripts/
-│   └── download_data.py    # Descarga de datasets
-├── runs/                   # Artefactos por corrida (runs/<run_id>/: parquet, metadata.json, modelos)
-├── docs/                   # Documentación final del TT
-├── data/                   # Datos crudos y procesados (ignorados por git)
-├── Makefile                # Orquestación de punta a punta
+├── app.py                    # Dashboard Streamlit unificado (punto de entrada)
+├── tt2_tablero_prep.py       # Prepara datos_tablero/ para la vista ejecutiva
+├── tt2_data_pack.zip         # Tablas de resultados de la pestaña técnica
+├── .streamlit/config.toml    # Tema y configuración del dashboard
+├── notebooks/                # Tres notebooks ejecutados (Airline, Diabetes, Polish) y el del dashboard
+├── src/                      # Módulos por dataset: airline_tt2, diabetes_tt2, polish_tt2
+├── runs/                     # Artefactos de las corridas finales (runs/<run_id>/)
+├── scripts/                  # download_data.py · preparar_tablero.py
+├── docs/                     # Documentación final del TT
+├── data/                     # Datos crudos (ignorados por git)
+├── Makefile
 └── requirements.txt
 ```
 
 ## Ejecución
 
-Requiere Python 3.10 o superior.
+Python 3.13 (versión de las corridas; el protocolo exige 3.10 o superior).
 
 ```bash
-git clone <URL-DEL-REPOSITORIO>
-cd tt-2026-b080
+git clone https://github.com/dcasas07/TT-2026-B080.git
+cd TT-2026-B080
 make setup        # entorno virtual + dependencias
-make data         # descarga los tres datasets
-make notebooks    # ejecuta los notebooks de punta a punta
+make data         # descarga los tres datasets en data/
+make notebooks    # re-ejecuta los tres notebooks de experimentación
+make tablero      # genera datos_tablero/ (vista ejecutiva) desde runs/ y data/
 make dashboard    # equivale a: streamlit run app.py
 ```
+
+La pestaña técnica del dashboard funciona sin pasos previos (usa `tt2_data_pack.zip`). La vista ejecutiva requiere `make data` y `make tablero`.
 
 ## Correspondencia con el protocolo
 
 | Producto esperado | Ubicación |
 |---|---|
 | Repositorio reproducible | Este repositorio (`Makefile`, `requirements.txt`, semilla 42) |
-| Pipeline ejecutable | `src/` y `notebooks/` |
+| Pipeline ejecutable | `src/`, `notebooks/`, `runs/` |
 | Dashboard interactivo | `app.py` → `streamlit run app.py` |
-| Documento técnico | `docs/` |
+| Documento técnico | `docs/Documentacion_Version_Final.pdf` |
 
 ## Criterios de éxito del protocolo
 
@@ -70,5 +75,5 @@ ECE ≤ 0.05 · Brier ≤ 0.20 · latencia de detección ≤ 500 muestras · fal
 
 - Semilla global `42` en particionado, modelos y órdenes aleatorios.
 - Transformaciones ajustadas únicamente con el conjunto de entrenamiento.
-- Dependencias listadas en `requirements.txt`.
-- Cada resultado del reporte técnico es recomputable desde su notebook.
+- Versiones de librerías fijadas en `requirements.txt` (tomadas del `metadata.json` de cada corrida).
+- Cada corrida registra el SHA-256 de los datos de entrada en su `metadata.json`.

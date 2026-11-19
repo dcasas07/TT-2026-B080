@@ -4,19 +4,21 @@ __pycache__/
 .venv/
 venv/
 *.egg-info/
+.cache/
 
 # Jupyter
 .ipynb_checkpoints/
 
-# Datos (se descargan con scripts/download_data.py)
-data/raw/
-data/processed/
+# Datos crudos (se descargan con scripts/download_data.py o desde los notebooks)
+data/airline/
+data/diabetes/
+data/polish/
+
+# Vista ejecutiva del dashboard (se genera con `make tablero`)
+datos_tablero/
 
 # Sistema / editores
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
-
-# Streamlit
-.streamlit/secrets.toml
