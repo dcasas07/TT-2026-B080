@@ -1,0 +1,218 @@
+{
+  "schema_version": "1.0",
+  "run_id": "tt2_polish_20261023T153437Z",
+  "proyecto": "TT 2026-B080 · Detección y Mitigación de Calibration Drift",
+  "dataset": "Polish Companies Bankruptcy (UCI 365)",
+  "entorno": {
+    "python": "3.13.16",
+    "sistema": "Linux-6.6.122+-x86_64-with-glibc2.39",
+    "procesador": "x86_64",
+    "cpus_logicos": 2,
+    "ram_gb": 13.6,
+    "colab": true,
+    "numpy": "2.1.3",
+    "pandas": "2.2.3",
+    "scipy": "1.16.3",
+    "scikit-learn": "1.6.1",
+    "xgboost": "3.4.1",
+    "run_id": "tt2_polish_20261023T153437Z"
+  },
+  "config": {
+    "seed": 42,
+    "data_dir": "/content/polish_data",
+    "artifacts_dir": "./artifacts/bankruptcy/tt2_polish_20261023T153437Z",
+    "train_frac": 0.6,
+    "cal_frac": 0.1,
+    "inner_val_frac": 0.15,
+    "n_jobs": 2,
+    "xgb_params": {
+      "max_depth": 4,
+      "learning_rate": 0.05,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "min_child_weight": 5,
+      "reg_lambda": 1.0,
+      "tree_method": "hist"
+    },
+    "xgb_max_rounds": 2000,
+    "xgb_early_stopping": 100,
+    "lr_C_grid": [
+      0.01,
+      0.1,
+      1.0
+    ],
+    "corr_threshold": 0.9,
+    "calib_methods": [
+      "none",
+      "temperature",
+      "platt",
+      "isotonic"
+    ],
+    "calib_cv_folds": 5,
+    "bootstrap_B": 300,
+    "psi_bins": 10,
+    "psi_null_B": 200,
+    "psi_null_sizes": [
+      500,
+      1000,
+      2000
+    ],
+    "block_size": 500,
+    "recal_buffer": 2000,
+    "retrain_cooldown": 2,
+    "calendar_K": 10,
+    "risk_cuts": [
+      0.05,
+      0.2
+    ],
+    "fbeta": 2.0,
+    "timing_repeats": 3,
+    "run_extended_benchmark": true,
+    "monitor_validation_R": 20,
+    "latency_multipliers": [
+      1.5,
+      2.0,
+      3.0
+    ],
+    "download_artifacts": true
+  },
+  "sha256_datos": {
+    "1year.arff": "978ce71a4809e964dda43d46a368c27a1a36df1e0b6345f215473ec9c3b12add",
+    "2year.arff": "ec67460055735857b84a73d961193e2b7313147c1b93d900f08400e4071bdb7c",
+    "3year.arff": "662617d2f90bfd17223595e50a0ac7007f9ee7915cfb519dee0422b31dd13ebc",
+    "4year.arff": "ae11434f0823d6208142ac5a4e83b4f3d7bcf4e827b330a798fdd6590bd9f5cb",
+    "5year.arff": "cb3f6f250ac46bd8d18e9a222f489fe8ee3e396fcec18959f5a0ef8e8169b2fc"
+  },
+  "correccion_orden": {
+    "filas_originales": 43405,
+    "duplicados_eliminados": 401,
+    "grupos_duplicados_con_clase_en_conflicto": 0,
+    "filas_finales": 43004
+  },
+  "particion": {
+    "train": {
+      "filas": 25802,
+      "prevalencia": 0.041895977056042165
+    },
+    "calibration": {
+      "filas": 4300,
+      "prevalencia": 0.05325581395348837
+    },
+    "production": {
+      "filas": 12902,
+      "prevalencia": 0.059913191753216556
+    }
+  },
+  "modelos": {
+    "lr": {
+      "calibrador": "platt",
+      "parametros_calibrador": {
+        "a": 1.0257821560300224,
+        "b": 0.4020954428938316
+      },
+      "umbral_F2": 0.0731081429693025
+    },
+    "xgb": {
+      "calibrador": "platt",
+      "parametros_calibrador": {
+        "a": 1.2404403184041382,
+        "b": 1.399575263169156
+      },
+      "umbral_F2": 0.13975607407711027
+    }
+  },
+  "xgb_n_arboles": 625,
+  "lr_C": 0.01,
+  "lr_variables": [
+    "Attr4",
+    "Attr5",
+    "Attr6",
+    "Attr9",
+    "Attr10",
+    "Attr12",
+    "Attr13",
+    "Attr15",
+    "Attr21",
+    "Attr23",
+    "Attr24",
+    "Attr25",
+    "Attr26",
+    "Attr27",
+    "Attr29",
+    "Attr30",
+    "Attr34",
+    "Attr35",
+    "Attr36",
+    "Attr37",
+    "Attr38",
+    "Attr39",
+    "Attr40",
+    "Attr41",
+    "Attr43",
+    "Attr44",
+    "Attr45",
+    "Attr46",
+    "Attr49",
+    "Attr50",
+    "Attr54",
+    "Attr55",
+    "Attr56",
+    "Attr57",
+    "Attr59",
+    "Attr60",
+    "Attr63",
+    "Attr64",
+    "n_missing"
+  ],
+  "modelo_recomendado": "xgb",
+  "metricas_produccion_modelo_recomendado": {
+    "AUC": "0.9636 [0.9560, 0.9695]",
+    "AP": "0.8025 [0.7767, 0.8264]",
+    "Brier": "0.0236 [0.0214, 0.0259]",
+    "ECE": "0.0059 [0.0045, 0.0090]",
+    "BSS": 0.5831,
+    "LogLoss": 0.0878,
+    "ACE": 0.0062,
+    "MCE": 0.2165,
+    "CITL": 0.2497,
+    "Pendiente": 1.091,
+    "O/E": 1.1065,
+    "KS": 0.7974,
+    "KS_p": "0.0e+00"
+  },
+  "bandas_riesgo": {
+    "Bajo": "< 0.05",
+    "Medio": "0.05–0.2",
+    "Alto": "≥ 0.2"
+  },
+  "artefactos": [
+    "bundle.joblib",
+    "xgb_model.json",
+    "polish_tt2.py",
+    "metadata.json",
+    "entorno.parquet",
+    "reporte_carga.parquet",
+    "diagnostico_orden.parquet",
+    "validacion_dataset.parquet",
+    "particion.parquet",
+    "faltantes_top.parquet",
+    "grupos_colinealidad.parquet",
+    "psi_cohortes.parquet",
+    "psi_splits.parquet",
+    "psi_umbrales_nulos.parquet",
+    "seleccion_C_lr.parquet",
+    "tiempos_protocolo.parquet",
+    "ablaciones.parquet",
+    "benchmark.parquet",
+    "seleccion_calibrador.parquet",
+    "metricas_produccion.parquet",
+    "confiabilidad_bins.parquet",
+    "piso_ruido_ece.parquet",
+    "bandas_riesgo.parquet",
+    "politicas_bloques.parquet",
+    "politicas_resumen.parquet",
+    "monitor_falsas_alarmas.parquet",
+    "monitor_latencia.parquet",
+    "tt1_vs_tt2.parquet"
+  ]
+}

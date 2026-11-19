@@ -1,0 +1,213 @@
+{
+  "schema_version": "1.0",
+  "run_id": "tt2_diabetes_20261023T153417Z",
+  "proyecto": "TT 2026-B080 · Detección y Mitigación de Calibration Drift",
+  "dataset": "Diabetes 130-US Hospitals 1999–2008 (UCI 296)",
+  "sha256_datos": {
+    "diabetic_data.csv": "0689e7ec031237dc63031b938805c48377748761a3b26acab621567afa24df97",
+    "IDS_mapping.csv": "f1bb82b471cb34649352597572c9b1fb00bd27f77b9f5a22a03dc3eb1039749e"
+  },
+  "entorno": {
+    "python": "3.13.16",
+    "sistema": "Linux-6.6.122+-x86_64-with-glibc2.39",
+    "procesador": "x86_64",
+    "cpus_logicos": 2,
+    "ram_gb": 13.6,
+    "colab": true,
+    "numpy": "2.1.3",
+    "pandas": "2.2.3",
+    "scipy": "1.16.3",
+    "scikit-learn": "1.6.1",
+    "xgboost": "3.4.1",
+    "run_id": "tt2_diabetes_20261023T153417Z"
+  },
+  "config": {
+    "seed": 42,
+    "data_dir": "/content/diabetes_data",
+    "artifacts_dir": "./artifacts/diabetes/tt2_diabetes_20261023T153417Z",
+    "n_periods": 20,
+    "censor_ratio": 0.7,
+    "train_frac": 0.6,
+    "cal_frac": 0.1,
+    "inner_val_frac": 0.15,
+    "n_jobs": 2,
+    "top_specialties": 15,
+    "onehot_min_frequency": 100,
+    "xgb_params": {
+      "max_depth": 4,
+      "learning_rate": 0.05,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "min_child_weight": 50,
+      "reg_lambda": 5.0,
+      "tree_method": "hist",
+      "enable_categorical": true,
+      "max_cat_to_onehot": 1
+    },
+    "xgb_max_rounds": 2000,
+    "xgb_early_stopping": 100,
+    "lr_C_grid": [
+      0.01,
+      0.1,
+      1.0
+    ],
+    "calib_methods": [
+      "none",
+      "temperature",
+      "platt",
+      "isotonic"
+    ],
+    "calib_cv_folds": 5,
+    "bootstrap_B": 300,
+    "psi_bins": 10,
+    "psi_max_categories": 30,
+    "psi_null_B": 200,
+    "psi_null_sizes": [
+      500,
+      1000,
+      2000
+    ],
+    "block_size": 1000,
+    "recal_buffer": 3000,
+    "retrain_cooldown": 2,
+    "calendar_K": 8,
+    "risk_cuts": [
+      0.08,
+      0.15
+    ],
+    "fbeta": 2.0,
+    "timing_repeats": 3,
+    "run_extended_benchmark": true,
+    "monitor_block": 500,
+    "monitor_validation_R": 20,
+    "latency_multipliers": [
+      1.5,
+      2.0,
+      3.0
+    ],
+    "tt1_window": 500,
+    "tt1_stride": 200,
+    "download_artifacts": true
+  },
+  "cohorte": [
+    {
+      "paso": "Encuentros originales",
+      "encuentros": 101766
+    },
+    {
+      "paso": "Sin altas por defunción u hospicio",
+      "encuentros": 99343
+    },
+    {
+      "paso": "Primer encuentro por paciente",
+      "encuentros": 69990
+    },
+    {
+      "paso": "Sexo registrado",
+      "encuentros": 69987
+    },
+    {
+      "paso": "Sin periodos con etiqueta censurada [19]",
+      "encuentros": 66487
+    }
+  ],
+  "periodos_censurados_excluidos": [
+    19
+  ],
+  "altas_excluidas": [
+    11,
+    13,
+    14,
+    19,
+    20,
+    21
+  ],
+  "particion": {
+    "train": {
+      "encuentros": 39892,
+      "tasa_readmision_30d": 0.09871653464353755
+    },
+    "calibration": {
+      "encuentros": 6648,
+      "tasa_readmision_30d": 0.09190734055354995
+    },
+    "production": {
+      "encuentros": 19947,
+      "tasa_readmision_30d": 0.07971123477214619
+    }
+  },
+  "modelos": {
+    "lr": {
+      "calibrador": "temperature",
+      "parametros_calibrador": {
+        "T": 0.9233164257171799
+      },
+      "umbral_F2": 0.08405529416177328
+    },
+    "xgb": {
+      "calibrador": "platt",
+      "parametros_calibrador": {
+        "a": 1.1939380280337304,
+        "b": 0.22431988828335145
+      },
+      "umbral_F2": 0.07621593597989816
+    }
+  },
+  "xgb_n_arboles": 41,
+  "lr_C": 0.01,
+  "modelo_recomendado": "xgb",
+  "metricas_produccion_modelo_recomendado": {
+    "AUC": "0.6228 [0.6065, 0.6352]",
+    "AP": "0.1359 [0.1246, 0.1489]",
+    "Brier": "0.0722 [0.0693, 0.0753]",
+    "ECE": "0.0115 [0.0079, 0.0151]",
+    "BSS": 0.0203,
+    "LogLoss": 0.2712,
+    "ACE": 0.0125,
+    "MCE": 0.0448,
+    "CITL": -0.1516,
+    "Pendiente": 0.8518,
+    "O/E": 0.8739,
+    "KS": 0.1813,
+    "KS_p": "1.6e-42"
+  },
+  "bandas_riesgo": {
+    "Bajo": "< 0.08",
+    "Medio": "0.08–0.15",
+    "Alto": "≥ 0.15"
+  },
+  "artefactos": [
+    "bundle.joblib",
+    "xgb_model.json",
+    "diabetes_tt2.py",
+    "metadata.json",
+    "entorno.parquet",
+    "faltantes_crudos.parquet",
+    "ids_mapping.parquet",
+    "ids_mapping_tt1_vs_tt2.parquet",
+    "cohorte.parquet",
+    "periodos.parquet",
+    "validacion_dataset.parquet",
+    "particion.parquet",
+    "faltantes_train_vs_produccion.parquet",
+    "dimensionalidad.parquet",
+    "psi_periodos.parquet",
+    "psi_splits.parquet",
+    "psi_umbrales_nulos.parquet",
+    "seleccion_C_lr.parquet",
+    "tiempos_protocolo.parquet",
+    "ablaciones.parquet",
+    "benchmark.parquet",
+    "seleccion_calibrador.parquet",
+    "metricas_produccion.parquet",
+    "confiabilidad_bins.parquet",
+    "piso_ruido_ece.parquet",
+    "bandas_riesgo.parquet",
+    "politicas_bloques.parquet",
+    "politicas_resumen.parquet",
+    "politicas_efecto.parquet",
+    "monitor_falsas_alarmas.parquet",
+    "monitor_latencia.parquet",
+    "tt1_vs_tt2.parquet"
+  ]
+}

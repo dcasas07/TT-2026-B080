@@ -1,0 +1,181 @@
+{
+  "schema_version": "1.0",
+  "run_id": "tt2_airline_20261023T153424Z",
+  "proyecto": "TT 2026-B080 · Detección y Mitigación de Calibration Drift",
+  "dataset": "Airline Delay (OpenML 1169)",
+  "fuente_datos": "OpenML 1169",
+  "sha256_datos": "e46fc1537a02948846d9e43fc5d5226f3f87de65edf4e409aaf12ba101eefca6",
+  "entorno": {
+    "python": "3.13.16",
+    "sistema": "Linux-6.6.122+-x86_64-with-glibc2.39",
+    "procesador": "x86_64",
+    "cpus_logicos": 2,
+    "ram_gb": 13.6,
+    "colab": true,
+    "numpy": "2.1.3",
+    "pandas": "2.2.3",
+    "scipy": "1.16.3",
+    "scikit-learn": "1.6.1",
+    "xgboost": "3.4.1",
+    "run_id": "tt2_airline_20261023T153424Z"
+  },
+  "config": {
+    "seed": 42,
+    "data_dir": "/content/airline_data",
+    "artifacts_dir": "./artifacts/airline/tt2_airline_20261023T153424Z",
+    "train_days": 18,
+    "cal_days": 3,
+    "inner_val_days": 3,
+    "n_jobs": 2,
+    "xgb_params": {
+      "max_depth": 6,
+      "learning_rate": 0.05,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "min_child_weight": 20,
+      "reg_lambda": 1.0,
+      "tree_method": "hist",
+      "enable_categorical": true,
+      "max_cat_to_onehot": 1
+    },
+    "xgb_max_rounds": 2000,
+    "xgb_early_stopping": 100,
+    "lr_C_grid": [
+      0.01,
+      0.1,
+      1.0
+    ],
+    "onehot_min_frequency": 200,
+    "history_smoothing_m": 20,
+    "calib_methods": [
+      "none",
+      "temperature",
+      "platt",
+      "isotonic"
+    ],
+    "calib_cv_folds": 5,
+    "bootstrap_B": 200,
+    "psi_bins": 10,
+    "psi_max_categories": 30,
+    "psi_null_B": 200,
+    "psi_null_sizes": [
+      500,
+      1000,
+      2000,
+      17000
+    ],
+    "recal_buffer_days": 3,
+    "retrain_cooldown_days": 2,
+    "calendar_K_days": 3,
+    "risk_cuts": [
+      0.35,
+      0.6
+    ],
+    "threshold_rule": "youden",
+    "timing_repeats": 3,
+    "run_extended_benchmark": true,
+    "benchmark_rows": 100000,
+    "monitor_block": 500,
+    "monitor_validation_R": 20,
+    "label_shift_pp": [
+      0.05,
+      0.1,
+      0.15
+    ],
+    "tt1_window": 500,
+    "tt1_stride": 200,
+    "download_artifacts": true
+  },
+  "dias": {
+    "total": 31,
+    "train": "0–17",
+    "calibration": "18–20",
+    "production": "21–30"
+  },
+  "particion": {
+    "train": {
+      "vuelos": 311213,
+      "tasa_retraso": 0.40170879751167204
+    },
+    "calibration": {
+      "vuelos": 54190,
+      "tasa_retraso": 0.5045395829488836
+    },
+    "production": {
+      "vuelos": 173980,
+      "tasa_retraso": 0.5052649729854006
+    }
+  },
+  "historial": {
+    "prior": 0.40170879751167204,
+    "m": 20,
+    "ultimo_dia_en_historial": 30
+  },
+  "modelos": {
+    "lr": {
+      "calibrador": "isotonic",
+      "parametros_calibrador": {},
+      "umbral_Youden": 0.5059561128526644
+    },
+    "xgb": {
+      "calibrador": "isotonic",
+      "parametros_calibrador": {},
+      "umbral_Youden": 0.49115756154060364
+    }
+  },
+  "xgb_n_arboles": 177,
+  "lr_C": 0.01,
+  "modelo_recomendado": "xgb",
+  "metricas_produccion_modelo_recomendado": {
+    "AUC": "0.7062 [0.7041, 0.7084]",
+    "Brier": "0.2168 [0.2161, 0.2175]",
+    "ECE": "0.0228 [0.0211, 0.0247]",
+    "AP": 0.7173,
+    "BSS": 0.1683,
+    "LogLoss": 0.6219,
+    "ACE": 0.0227,
+    "MCE": 0.0636,
+    "CITL": 0.0214,
+    "Pendiente": 0.8518,
+    "O/E": 1.0089,
+    "KS": 0.2937,
+    "KS_p": "0.0e+00"
+  },
+  "bandas_riesgo": {
+    "Bajo": "< 0.35",
+    "Medio": "0.35–0.6",
+    "Alto": "≥ 0.6"
+  },
+  "artefactos": [
+    "bundle.joblib",
+    "xgb_model.json",
+    "airline_tt2.py",
+    "metadata.json",
+    "entorno.parquet",
+    "perfil_atributos.parquet",
+    "reconstruccion_dias.parquet",
+    "resumen_diario.parquet",
+    "diagnostico_ventanas_tt1.parquet",
+    "validacion_dataset.parquet",
+    "particion.parquet",
+    "perfil_categoricas.parquet",
+    "variables_historial.parquet",
+    "psi_dias.parquet",
+    "psi_splits.parquet",
+    "psi_umbrales_nulos.parquet",
+    "seleccion_C_lr.parquet",
+    "tiempos_protocolo.parquet",
+    "ablaciones.parquet",
+    "benchmark.parquet",
+    "seleccion_calibrador.parquet",
+    "metricas_produccion.parquet",
+    "confiabilidad_bins.parquet",
+    "piso_ruido_ece.parquet",
+    "bandas_riesgo.parquet",
+    "politicas_dias.parquet",
+    "politicas_resumen.parquet",
+    "monitor_falsas_alarmas.parquet",
+    "monitor_latencia.parquet",
+    "tt1_vs_tt2.parquet"
+  ]
+}
